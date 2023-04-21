@@ -1,0 +1,26 @@
+{%extends "/layouts/main.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+	<div class="container d-flex h-75">
+	    <div class="row justify-content-center align-self-center welcome">
+	    	<h3>Wanna unsubscribe?</h3>
+			<div style="width:100%">
+			{% if error %}
+				<div class="alert alert-danger">
+					{{error}}
+				</div>
+			{% endif %}
+			<form action="/unsubscribe" method="POST">
+			  <div class="form-group">
+			    <label for="email">Email</label>
+			    <input type="email" name="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="Subscribe with email..." required>
+			  </div>
+			  <div style="height: 10px"></div>
+			  <button type="submit" class="btn btn-danger">Unsubscribe</button>
+			</form>
+			</div>
+	    </div>
+	</div>
+{% endblock %}

@@ -1,0 +1,52 @@
+{%extends "/layouts/main.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+	<div class="container d-flex h-75">
+	    <div class="row justify-content-center align-self-center welcome">
+	    	<h3>Hello there!</h3>
+			<div style="width:100%">
+			{% if error %}
+				<div class="alert alert-danger">
+					{{error}}
+				</div>
+			{% endif %}
+			<form action="/subscribe" method="POST">
+			  <div class="form-group">
+			    <label for="email">Email</label>
+			    <input type="email" name="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="Subscribe with email..." required>
+			  </div>
+			  <div style="height:7px"></div>
+			  <div class="form-group">
+			    <label for="stock">Stock symbol</label>
+			    <input type="text" name="stock" class="form-control" id="stock" aria-describedby="stockHelp" placeholder="Stock symbol" required>
+			  </div>
+			  <div style="height:7px"></div>
+			  <div class="form-group">
+			    <label for="stock">Threshold</label>
+			    <input type="number" name="threshold" min="0" class="form-control" id="threshold" aria-describedby="thresholdHelp" placeholder="Threshold" required>
+			  </div>
+			  <div style="height:7px"></div>
+			  <div class="form-group">
+			    <label for="time">Interval</label>
+			    <input type="number" name="time" min="0" class="form-control" id="time" aria-describedby="timeHelp" placeholder="Time to get regular notification..." required>
+			  </div>
+			  <div class="form-group">
+				<div class="form-check form-check-inline">
+					<input class="form-check-input" type="radio" name="time-type" id="inlineRadio1" value="hours" checked>
+					<label class="form-check-label" for="inlineRadio1">Hours</label>
+				</div>
+				<div class="form-check form-check-inline">
+					<input class="form-check-input" type="radio" name="time-type" id="inlineRadio2" value="days">
+					<label class="form-check-label" for="inlineRadio2">Days</label>
+				</div>
+
+			  </div>
+			  <div style="height: 10px"></div>
+			  <button type="submit" class="btn btn-primary">Subscribe</button>
+			</form>
+			</div>
+	    </div>
+	</div>
+{% endblock %}
