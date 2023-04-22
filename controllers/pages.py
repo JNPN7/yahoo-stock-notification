@@ -1,4 +1,4 @@
-from yahoo_notifier.notifier import hourly_subscribers, daily_subscribers, check_if_stock_symbol_exists
+from yahoo_notifier.notifier import hourly_subscribers, daily_subscribers, check_if_stock_symbol_exists, get_stock_data
 from flask import session, redirect, render_template, request, jsonify, Response, flash
 
 subscribers: list = []
@@ -6,17 +6,6 @@ subscribers: list = []
 def home():
     return render_template('home.html')
 
-def insert():
-    hourly_subscribers.append(
-        {
-        'email': "haha@gmail.com",
-        'stocks': "GOOG",
-        'interval': 1,
-        'current': 1,
-        'threshold': 100
-        }
-    )
-    return "OOK1"
 
 def unsubscribe():
     if request.method == 'POST':
@@ -63,3 +52,26 @@ def subscribe():
         return render_template("home.html", error="Some error occured try again")    
     
     return render_template('successfull.html', message="subscribed")
+
+
+def getStock(stock_sym: str):
+    if stock_sym == None:
+        # return render_template('stock.html')
+        return render_template('stock.html')
+    else:
+        print(stock_sym)
+        print(check_if_stock_symbol_exists(stock_sym))
+        if not check_if_stock_symbol_exists(stock_sym):
+            return render_template('stock.html', error="Stock symbol doesn't exists")
+
+        data = get_stock_data(stock_sym)
+        return render_template('stock.html', data=data)
+
+
+def searchStock():
+    if request.method == 'POST':
+        req = request.form 
+        if not req["stock"]:
+            return redirect("/stock")
+        
+        return redirect(f'/stock/{req["stock"]}')

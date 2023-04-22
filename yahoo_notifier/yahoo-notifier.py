@@ -31,7 +31,7 @@ daily_subscirbers = [
         'current': 0
     }
 ]
-msft = yf.Ticker("AAPL")
+msft = yf.Ticker("META")
 
 # get all stock info
 print(f'{msft.info}')

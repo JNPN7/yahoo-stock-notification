@@ -9,7 +9,7 @@ from yahoo_notifier.mailer import Mailer
 #         'stock_sym': "META",
 #         'interval': 1,
 #         'current': 1,
-#         'threshold': 500,
+#         'threshold': 100,
 #     },
 # }
 
@@ -26,10 +26,14 @@ from yahoo_notifier.mailer import Mailer
 hourly_subscribers: dict = {}
 daily_subscribers: dict = {}
 
-def check_if_stock_symbol_exists(stock_symbol: str):
+def get_stock_data(stock_sym: str):
+    msft = yf.Ticker(stock_sym)
+    data = msft.info
+    return data
+
+def check_if_stock_symbol_exists(stock_sym: str):
     try: 
-        msft = yf.Ticker(stock_symbol)
-        data = msft.info
+        data = get_stock_data(stock_sym)
         _ = data['currentPrice']
         return True
     except:
@@ -45,8 +49,7 @@ def notify_daily_subscriber():
         subscriber["current"] = 1
 
         if subscriber["stock_sym"] not in stock:
-            msft = yf.Ticker(subscriber["stock_sym"])
-            data = msft.info
+            data = get_stock_data(subscriber["stock_sym"])
             stock[subscriber["stock_sym"]] = data['currentPrice']
 
         if stock[subscriber["stock_sym"]] > subscriber["threshold"]:
@@ -57,6 +60,7 @@ def notify_daily_subscriber():
 
 def notify_hourly_subscriber():
     stock = {}
+    print(hourly_subscribers)
     for _, subscriber in hourly_subscribers.items():
         if subscriber["current"] != subscriber["interval"]:
             subscriber["current"] += 1
@@ -64,8 +68,7 @@ def notify_hourly_subscriber():
         subscriber["current"] = 1
 
         if subscriber["stock_sym"] not in stock:
-            msft = yf.Ticker(subscriber["stock_sym"])
-            data = msft.info
+            data = get_stock_data(subscriber["stock_sym"])
             stock[subscriber["stock_sym"]] = data['currentPrice']
 
         if stock[subscriber["stock_sym"]] > subscriber["threshold"]:
